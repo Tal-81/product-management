@@ -165,13 +165,44 @@ submit.addEventListener("click", (e)=> {
 })
 
 // read data from localStorage ________
-function renderProducts() {
+function renderProducts(searchBy="title", searchFor="") {
   if (products.length == 0) {
     document.getElementById("table-body").innerHTML = `
     <tr><td colspan="10" class="text-center">No products available</td></tr>`;
   }  else {
     document.getElementById("table-body").innerHTML = ""; // clear table before rendering
     products.forEach((product, id) => {
+      if (searchFor !== "") {
+        if (searchBy === "title" && product.title.trim().toLowerCase().includes(searchFor)) {
+          document.getElementById("table-body").innerHTML += `
+            <tr>
+              <th scope="row">${id + 1}</th>
+              <td>${product.title}</td>
+              <td>${product.price}</td>
+              <td>${product.tax}</td>
+              <td>${product.discount}</td>
+              <td>${product.total}</td>
+              <td>${product.quantity}</td>
+              <td>${product.category}</td>
+              <td><button class="btn btn-warning btn-sm" onclick="updateProduct(${product.id})">Update</button></td>
+              <td><button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Delete</button></td>
+            </tr>`;
+        } else if (searchBy === "category" && product.category.trim().toLowerCase().includes(searchFor)) {
+          document.getElementById("table-body").innerHTML += `
+            <tr>
+              <th scope="row">${id + 1}</th>
+              <td>${product.title}</td>
+              <td>${product.price}</td>
+              <td>${product.tax}</td>
+              <td>${product.discount}</td>
+              <td>${product.total}</td>
+              <td>${product.quantity}</td>
+              <td>${product.category}</td>
+              <td><button class="btn btn-warning btn-sm" onclick="updateProduct(${product.id})">Update</button></td>
+              <td><button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Delete</button></td>
+            </tr>`;
+        }
+      } else {
       document.getElementById("table-body").innerHTML += `
       <tr>
         <th scope="row">${id + 1}</th>
@@ -185,6 +216,7 @@ function renderProducts() {
         <td><button class="btn btn-warning btn-sm" onclick="updateProduct(${product.id})">Update</button></td>
         <td><button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Delete</button></td>
       </tr>`;
+    }
     });
   }
   countProducts()
@@ -238,12 +270,12 @@ function updateProduct(productId) {
   title.scrollIntoView({ block: 'center', behavior: 'smooth' });
 }
 
-// search product by title or category
+// search product by title
 btnByTitle.addEventListener("click", ()=> {
   if (search.value.trim() === "") {
     return showNotice("Please enter a search term");
   }
-  renderProducts("title");
+  renderProducts("title", search.value.trim().toLowerCase());
 });
 
 // delete all products ___________
