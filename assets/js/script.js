@@ -16,6 +16,7 @@ let btnByCategory = document.getElementById("btn-by-Category");
 let btnDeleteAll = document.getElementById("btn-delete-all");
 let resultTotal = 0; // total result variable(price + tax - discount)
 let products = []; // products array
+let count = 0; // products count based on search or total
 
 
 // call the products array ___________
@@ -166,6 +167,7 @@ submit.addEventListener("click", (e)=> {
 
 // read data from localStorage ________
 function renderProducts(searchBy="title", searchFor="") {
+  let count = 0; // reset count for each render
   if (products.length == 0) {
     document.getElementById("table-body").innerHTML = `
     <tr><td colspan="10" class="text-center">No products available</td></tr>`;
@@ -174,6 +176,7 @@ function renderProducts(searchBy="title", searchFor="") {
     products.forEach((product, id) => {
       if (searchFor !== "") {
         if (searchBy === "title" && product.title.trim().toLowerCase().includes(searchFor)) {
+          count++;
           document.getElementById("table-body").innerHTML += `
             <tr>
               <th scope="row">${id + 1}</th>
@@ -188,6 +191,7 @@ function renderProducts(searchBy="title", searchFor="") {
               <td><button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Delete</button></td>
             </tr>`;
         } else if (searchBy === "category" && product.category.trim().toLowerCase().includes(searchFor)) {
+          count++;
           document.getElementById("table-body").innerHTML += `
             <tr>
               <th scope="row">${id + 1}</th>
@@ -203,6 +207,7 @@ function renderProducts(searchBy="title", searchFor="") {
             </tr>`;
         }
       } else {
+      count++;
       document.getElementById("table-body").innerHTML += `
       <tr>
         <th scope="row">${id + 1}</th>
@@ -219,7 +224,7 @@ function renderProducts(searchBy="title", searchFor="") {
     }
     });
   }
-  countProducts()
+  countProducts(count)
 }
 
 // show Message when the form has submitted ___________
@@ -234,9 +239,9 @@ function showNotice(text) {
 }
 
 // count products ___________
-function countProducts() {
-  document.getElementById("products-count").innerText = products.length + " product(s) available";
-  return products.length;
+function countProducts(count) {
+  document.getElementById("products-count").innerText = +count + " product(s) available";
+  return count;
 }
 
 // delete product ___________
@@ -288,7 +293,7 @@ btnByCategory.addEventListener("click", ()=> {
 
 // delete all products ___________
 btnDeleteAll.addEventListener("click", ()=> {
-  if (countProducts() === 0) {
+  if (countProducts(count) === 0) {
     return showNotice("No products to delete");
   }
   products = [];
