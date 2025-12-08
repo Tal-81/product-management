@@ -278,6 +278,14 @@ btnByTitle.addEventListener("click", ()=> {
   renderProducts("title", search.value.trim().toLowerCase());
 });
 
+// search product by category
+btnByCategory.addEventListener("click", ()=> {
+  if (search.value.trim() === "") {
+    return showNotice("Please enter a search term");
+  }
+  renderProducts("category", search.value.trim().toLowerCase());
+});
+
 // delete all products ___________
 btnDeleteAll.addEventListener("click", ()=> {
   if (countProducts() === 0) {
