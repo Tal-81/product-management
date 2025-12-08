@@ -297,7 +297,7 @@ btnByCategory.addEventListener("click", ()=> {
 
 // delete all products ___________
 btnDeleteAll.addEventListener("click", ()=> {
-  if (countProducts(count) === 0) {
+  if (products.length === 0) {
     return showNotice("No products to delete");
   }
   products = [];
