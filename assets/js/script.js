@@ -186,7 +186,8 @@ function renderProducts() {
         <td><button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Delete</button></td>
       </tr>`;
     });
-  }  
+  }
+  countProducts()
 }
 
 // show Message when the form has submitted ___________
@@ -202,6 +203,7 @@ function showNotice(text) {
 
 // count products ___________
 function countProducts() {
+  document.getElementById("products-count").innerText = products.length + " product(s) available";
   return products.length;
 }
 
@@ -237,7 +239,12 @@ function updateProduct(productId) {
 }
 
 // search product by title or category
-
+btnByTitle.addEventListener("click", ()=> {
+  if (search.value.trim() === "") {
+    return showNotice("Please enter a search term");
+  }
+  renderProducts("title");
+});
 
 // delete all products ___________
 btnDeleteAll.addEventListener("click", ()=> {
