@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+.container-fluid span {
+  color: yellow !important;
+}
+
 #message {
   font-size: 1rem;
   font-weight: 500;

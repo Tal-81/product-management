@@ -13,6 +13,15 @@ let btnByTitle = document.getElementById("btn-by-title");
 let btnByCategory = document.getElementById("btn-by-Category");
 let btnDeleteAll = document.getElementById("btn-delete-all");
 let resultTotal = 0; // total result variable(price + tax - discount)
+let products = []; // products array
+
+
+// create products array ___________
+if (!localStorage.getItem("products")) {
+  localStorage.setItem('products', JSON.stringify(products));
+} else {
+  products = JSON.parse(localStorage.getItem("products"));
+}
 
 // show Message when the form has submitted ___________
 function showMsg(target, text) {
@@ -49,20 +58,20 @@ function dataValidation() {
   if (!discount.value || discount.value < 0 || isNaN(discount.value)) discount.value = 0;
       // price & tax validation____ 
   if (isNaN(price.value)) {
-    showMsg(price ,"Just numbers are allowed in price field");
+    showMsg(price ,"allowed, Just numbers in price field");
     return
 
   } else if (!price.value || price.value < 1) {
-    showMsg(price ,"Invalid Price, it should be more then 0");
+    showMsg(price ,"Invalid Price, should be more then 0");
     return
 
   } else {
     if (isNaN(tax.value)) {
-      showMsg(tax ,"Just numbers are allowed in price field");
+      showMsg(tax ,"allowed, Just numbers in tax field");
       return
 
     } else if (!tax.value || tax.value < 0) {
-      showMsg(tax, "Invalid Tax, it should be not empty or negative number");
+      showMsg(tax, "Invalid Tax, should be not empty or negative");
       return
 
     } else {
@@ -71,7 +80,7 @@ function dataValidation() {
   }
       // quantity validation___
   if (isNaN(quantity.value)) {
-    showMsg(quantity ,"Just numbers are allowed in quantity field");
+    showMsg(quantity ,"allowed, Just numbers in quantity field");
     return
   }
 
@@ -85,6 +94,7 @@ function dataValidation() {
     showMsg(category ,"Product category is required");
     return
   }
+  return true;
 }
 
 // show total ___________
@@ -107,17 +117,51 @@ submit.addEventListener("click", (e)=> {
   e.preventDefault();
   submit.setAttribute("disabled", "true");
   submit.innerHTML = "<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='currentColor' class='bi bi-hourglass-split' viewBox='0 0 16 16'><path d='M2.5 15a.5.5 0 1 1 0-1h1v-1a4.5 4.5 0 0 1 2.557-4.06c.29-.139.443-.377.443-.59v-.7c0-.213-.154-.451-.443-.59A4.5 4.5 0 0 1 3.5 3V2h-1a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-1v1a4.5 4.5 0 0 1-2.557 4.06c-.29.139-.443.377-.443.59v.7c0 .213.154.451.443.59A4.5 4.5 0 0 1 12.5 13v1h1a.5.5 0 0 1 0 1zm2-13v1c0 .537.12 1.045.337 1.5h6.326c.216-.455.337-.963.337-1.5V2zm3 6.35c0 .701-.478 1.236-1.011 1.492A3.5 3.5 0 0 0 4.5 13s.866-1.299 3-1.48zm1 0v3.17c2.134.181 3 1.48 3 1.48a3.5 3.5 0 0 0-1.989-3.158C8.978 9.586 8.5 9.052 8.5 8.351z'/></svg>";
-  dataValidation();
-  console.log(title.value, price.value, tax.value, discount.value, resultTotal, quantity.value, category.value);
+  let response = dataValidation();
+
+  if (!response) return; // if data is not valid, stop the function here
+
+  console.log(new Date().getTime().toLocaleString())
+  let newProd = {
+    id: new Date().getTime().toLocaleString(),
+    title: title.value.trim().toLowerCase(),
+    price: parseInt(price.value),
+    tax: parseInt(tax.value),
+    discount: parseInt(discount.value),
+    total: resultTotal,
+    quantity: parseInt(quantity.value),
+    category: category.value,
+  }
+
+  document.getElementsByTagName('form')[0].reset(); // clear inputs
+
+  products.push(newProd); // add new product to products array
+
+  console.log(products);
+  showMsg(null, "Product has been created successfully");
+
+  localStorage.setItem("products", JSON.stringify(products));
 })
 
-// save lacalStorage ___________
+// read data from localStorage ________
+products.forEach((product, id) => {
+  document.getElementById("table-body").innerHTML += `
+  <tr>
+    <th scope="row">${id + 1}</th>
+    <td>${product.title}</td>
+    <td>${product.price}</td>
+    <td>${product.tax}</td>
+    <td>${product.discount}</td>
+    <td>${product.total}</td>
+    <td>${product.quantity}</td>
+    <td>${product.category}</td>
+    <td><button class="btn btn-warning btn-sm">Update</button></td>
+    <td><button class="btn btn-danger btn-sm">Delete</button></td>
 
+  </tr>
+  `;
 
-// clear inputs ___________
-
-
-// read data from localStorage ___________
+});
 
 
 // count products ___________
