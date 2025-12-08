@@ -1,4 +1,5 @@
 // Variables ___________
+let inputHidden = document.getElementById("productId");
 let title = document.getElementById("productname");
 let price = document.getElementById("productprice");
 let tax = document.getElementById("producttax");
@@ -123,25 +124,40 @@ submit.addEventListener("click", (e)=> {
 
   if (!response) return; // if data is not valid, stop the function here
 
-  let newProd = {
-    id: new Date().getTime().toLocaleString(),
-    title: title.value.trim().toLowerCase(),
-    price: parseInt(price.value),
-    tax: parseInt(tax.value),
-    discount: parseInt(discount.value),
-    total: resultTotal,
-    quantity: parseInt(quantity.value),
-    category: category.value,
+  if (inputHidden.value) {
+    // update existing product
+    let productIndex = products.findIndex(prod => prod.id === parseInt(inputHidden.value));
+    products[productIndex] = {
+      id: products[productIndex].id,
+      title: title.value.trim().toLowerCase(),
+      price: parseInt(price.value),
+      tax: parseInt(tax.value),
+      discount: parseInt(discount.value),
+      total: resultTotal,
+      quantity: parseInt(quantity.value),
+      category: category.value,
+    }
+    inputHidden.value = "";
+    showMsg(null, "Product has been updated successfully");
+  } else {
+    // continue to create new product
+    let newProd = {
+      id: new Date().getTime(), // unique id
+      title: title.value.trim().toLowerCase(),
+      price: parseInt(price.value),
+      tax: parseInt(tax.value),
+      discount: parseInt(discount.value),
+      total: resultTotal,
+      quantity: parseInt(quantity.value),
+      category: category.value,
+    }
+    products.push(newProd); // add new product to products array
+    showMsg(null, "Product has been created successfully");
   }
 
   document.getElementsByTagName('form')[0].reset(); // clear inputs
 
-  products.push(newProd); // add new product to products array
-
-  showMsg(null, "Product has been created successfully");
-
   localStorage.setItem("products", JSON.stringify(products));
-
   products = JSON.parse(localStorage.getItem("products")) || [];
 
   renderProducts();
@@ -150,7 +166,7 @@ submit.addEventListener("click", (e)=> {
 // read data from localStorage ________
 function renderProducts() {
   if (products.length == 0) {
-    document.getElementById("table-body").innerHTML += `
+    document.getElementById("table-body").innerHTML = `
     <tr><td colspan="10" class="text-center">No products available</td></tr>`;
   }  else {
     document.getElementById("table-body").innerHTML = ""; // clear table before rendering
@@ -165,25 +181,58 @@ function renderProducts() {
         <td>${product.total}</td>
         <td>${product.quantity}</td>
         <td>${product.category}</td>
-        <td><button class="btn btn-warning btn-sm">Update</button></td>
-        <td><button class="btn btn-danger btn-sm">Delete</button></td>
+        <td><button class="btn btn-warning btn-sm" onclick="updateProduct(${product.id})">Update</button></td>
+        <td><button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Delete</button></td>
       </tr>`;
     });
   }  
 }
 
-
-
 // count products ___________
+function countProducts() {
+  return products.length;
+}
 
 
 // delete product ___________
+function deleteProduct(productId) {
+  products = products.filter(prod => prod.id !== productId);
 
+  showMsg(null, "Product has been deleted successfully");
+
+  localStorage.setItem("products", JSON.stringify(products));
+  products = JSON.parse(localStorage.getItem("products")) || [];
+
+  renderProducts();
+}
 
 // update product ___________
+function updateProduct(productId) {
+  let productIndex = products.findIndex(prod => prod.id === productId);
+  let targetProduct = products[productIndex];
 
+    // fill all input fields
+  inputHidden.value = targetProduct.id;
+  title.value = targetProduct.title;
+  price.value = targetProduct.price;
+  tax.value = targetProduct.tax;
+  discount.value = targetProduct.discount;
+  total.innerText = "Total:" + targetProduct.total;
+  quantity.value = targetProduct.quantity;
+  category.value = targetProduct.category;
+  submit.innerText = "Update";
+}
 
 // search product by title or category
 
 
-// clean data ___________
+// delete all products ___________
+btnDeleteAll.addEventListener("click", ()=> {
+  if (countProducts() === 0) {
+    return showMsg(null, "All products have been deleted successfully");
+  }
+  products = [];
+  showMsg(null, "All products have been deleted successfully");
+  localStorage.removeItem("products");
+  renderProducts();
+});
