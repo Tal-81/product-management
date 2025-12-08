@@ -27,7 +27,7 @@
     </nav>
 
     <!--  ____  Form Fields  ____  -->
-    <form>
+    <form class="bg-light border border-light-subtle rounded-3 px-2 py-5 mb-5">
       <!-- product name -->
        <div>
         <input type="hidden" id="productId" value="">
@@ -64,47 +64,51 @@
       <p class="invisible" id="message"></p>
       <button type="submit" id="submit" class="btn btn-primary mb-3 w-100">Create</button>
     </form>
-    <hr>
-    <!--  ____  Products Filter  ____  -->
-    <div class="mb-3 mt-5">
-      <input type="text" class="form-control" id="search" placeholder="Search..." aria-label="Search" aria-describedby="Search" maxlength="50">
-    </div>
-    <div class="row g-1 mx-1 mb-4">
-      <div class="col-6">
-        <button class="btn btn-primary w-100" id="btn-by-title">Search By Title</button>
-      </div>
-      <div class="col-6">
-        <button class="btn btn-primary w-100" id="btn-by-Category">Search By Category</button>
-      </div>
 
-      <div class="col-12 mt-2">
-          <button class="btn btn-primary w-100" id="btn-delete-all">Delete All (0)</button>
+    <!--  ____  Table section  ____  -->
+    <div class="bg-light border border-light-subtle rounded-3 px-2 py-5">
+      <h2 class="h4 mb-1 text-dark">Products List</h2>
+      <span class="badge bg-primary opacity-75" id="products-count">product available</span>
+      <!--  ____  Products Filter  ____  -->
+      <div class="mb-3 mt-5">
+        <input type="text" class="form-control" id="search" placeholder="Search..." aria-label="Search" aria-describedby="Search" maxlength="50">
       </div>
-    </div>
-
-
-    <!--  ____  Products Table  ____  -->
-    <div class="overflow-x-auto border border-white rounded-3">
-      <p class="invisible" id="message"></p>
-      <table class="table table-success table-striped table-hover">
-          <thead>
-            <tr>
-              <th scope="col">id</th>
-              <th scope="col">Title</th>
-              <th scope="col">Price</th>
-              <th scope="col">Tax</th>
-              <th scope="col">Discount</th>
-              <th scope="col">Total</th>
-              <th scope="col">Qty</th>
-              <th scope="col">Category</th>
-              <th scope="col">Update</th>
-              <th scope="col">Delete</th>
-            </tr>
-          </thead>
-          <tbody id="table-body">
-            <!-- table rows will be added here dynamically -->
-          </tbody>
-      </table>
+      <div class="row g-1 mx-1 mb-2">
+        <div class="col-6">
+          <button class="btn btn-primary w-100" id="btn-by-title">Search By Title</button>
+        </div>
+        <div class="col-6">
+          <button class="btn btn-primary w-100" id="btn-by-Category">Search By Category</button>
+        </div>
+  
+        <div class="col-12 mt-2">
+            <button class="btn btn-primary w-100" id="btn-delete-all">Delete All (0)</button>
+        </div>
+      </div>
+  
+      <p class="visible text-center" id="notice"></p>
+      <!--  ____  Products Table  ____  -->
+      <div class="overflow-x-auto border border-white rounded-3">
+        <table class="table table-success table-striped table-hover">
+            <thead>
+              <tr>
+                <th scope="col">id</th>
+                <th scope="col">Title</th>
+                <th scope="col">Price</th>
+                <th scope="col">Tax</th>
+                <th scope="col">Discount</th>
+                <th scope="col">Total</th>
+                <th scope="col">Qty</th>
+                <th scope="col">Category</th>
+                <th scope="col">Update</th>
+                <th scope="col">Delete</th>
+              </tr>
+            </thead>
+            <tbody id="table-body">
+              <!-- table rows will be added here dynamically -->
+            </tbody>
+        </table>
+      </div>
     </div>
   </div>
 

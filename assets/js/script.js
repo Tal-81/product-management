@@ -9,6 +9,7 @@ let category = document.getElementById("category");
 let quantity = document.getElementById("productquantity");
 let submit = document.getElementById("submit");
 let msg = document.getElementById("message");
+let notice = document.getElementById("notice");
 let search = document.getElementById("search");
 let btnByTitle = document.getElementById("btn-by-title");
 let btnByCategory = document.getElementById("btn-by-Category");
@@ -138,7 +139,7 @@ submit.addEventListener("click", (e)=> {
       category: category.value,
     }
     inputHidden.value = "";
-    showMsg(null, "Product has been updated successfully");
+    showNotice("Product has been updated successfully");
   } else {
     // continue to create new product
     let newProd = {
@@ -188,17 +189,27 @@ function renderProducts() {
   }  
 }
 
+// show Message when the form has submitted ___________
+function showNotice(text) {
+  notice.style.color = "green";
+  notice.innerText = text;
+  notice.classList.replace("invisible","visible");
+  setTimeout(()=> {
+    notice.classList.replace("visible","invisible");
+    notice.innerText = "";
+  }, 10000)
+}
+
 // count products ___________
 function countProducts() {
   return products.length;
 }
 
-
 // delete product ___________
 function deleteProduct(productId) {
   products = products.filter(prod => prod.id !== productId);
 
-  showMsg(null, "Product has been deleted successfully");
+  showNotice("Product has been deleted successfully");
 
   localStorage.setItem("products", JSON.stringify(products));
   products = JSON.parse(localStorage.getItem("products")) || [];
@@ -221,6 +232,8 @@ function updateProduct(productId) {
   quantity.value = targetProduct.quantity;
   category.value = targetProduct.category;
   submit.innerText = "Update";
+
+  title.scrollIntoView({ block: 'center', behavior: 'smooth' });
 }
 
 // search product by title or category
@@ -229,10 +242,10 @@ function updateProduct(productId) {
 // delete all products ___________
 btnDeleteAll.addEventListener("click", ()=> {
   if (countProducts() === 0) {
-    return showMsg(null, "All products have been deleted successfully");
+    return showNotice("No products to delete");
   }
   products = [];
-  showMsg(null, "All products have been deleted successfully");
+  showNotice("All products have been deleted successfully");
   localStorage.removeItem("products");
   renderProducts();
 });

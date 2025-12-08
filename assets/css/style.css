@@ -8,10 +8,17 @@
   color: yellow !important;
 }
 
-#message {
+#message, #notice {
   font-size: 1rem;
   font-weight: 500;
-  line-height: 40px;
-  height: 40px;
+  line-height: 30px;
   width: 100%;
+}
+
+#message {
+  height: 40px;
+}
+
+#notice {
+  height: 20px;
 }
