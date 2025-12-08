@@ -167,65 +167,69 @@ submit.addEventListener("click", (e)=> {
 
 // read data from localStorage ________
 function renderProducts(searchBy="title", searchFor="") {
-  let count = 0; // reset count for each render
-  if (products.length == 0) {
-    document.getElementById("table-body").innerHTML = `
-    <tr><td colspan="10" class="text-center">No products available</td></tr>`;
-  }  else {
-    document.getElementById("table-body").innerHTML = ""; // clear table before rendering
-    products.forEach((product, id) => {
-      if (searchFor !== "") {
-        if (searchBy === "title" && product.title.trim().toLowerCase().includes(searchFor)) {
-          count++;
-          document.getElementById("table-body").innerHTML += `
-            <tr>
-              <th scope="row">${id + 1}</th>
-              <td>${product.title}</td>
-              <td>${product.price}</td>
-              <td>${product.tax}</td>
-              <td>${product.discount}</td>
-              <td>${product.total}</td>
-              <td>${product.quantity}</td>
-              <td>${product.category}</td>
-              <td><button class="btn btn-warning btn-sm" onclick="updateProduct(${product.id})">Update</button></td>
-              <td><button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Delete</button></td>
-            </tr>`;
-        } else if (searchBy === "category" && product.category.trim().toLowerCase().includes(searchFor)) {
-          count++;
-          document.getElementById("table-body").innerHTML += `
-            <tr>
-              <th scope="row">${id + 1}</th>
-              <td>${product.title}</td>
-              <td>${product.price}</td>
-              <td>${product.tax}</td>
-              <td>${product.discount}</td>
-              <td>${product.total}</td>
-              <td>${product.quantity}</td>
-              <td>${product.category}</td>
-              <td><button class="btn btn-warning btn-sm" onclick="updateProduct(${product.id})">Update</button></td>
-              <td><button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Delete</button></td>
-            </tr>`;
-        }
-      } else {
-      count++;
-      document.getElementById("table-body").innerHTML += `
-      <tr>
-        <th scope="row">${id + 1}</th>
-        <td>${product.title}</td>
-        <td>${product.price}</td>
-        <td>${product.tax}</td>
-        <td>${product.discount}</td>
-        <td>${product.total}</td>
-        <td>${product.quantity}</td>
-        <td>${product.category}</td>
-        <td><button class="btn btn-warning btn-sm" onclick="updateProduct(${product.id})">Update</button></td>
-        <td><button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Delete</button></td>
-      </tr>`;
+  setTimeout(()=> {
+  
+    let count = 0; // reset count for each render
+    if (products.length == 0) {
+      document.getElementById("table-body").innerHTML = `
+      <tr><td colspan="10" class="text-center">No products available</td></tr>`;
+    }  else {
+      document.getElementById("table-body").innerHTML = ""; // clear table before rendering
+      products.forEach((product, id) => {
+        if (searchFor !== "") {
+          if (searchBy === "title" && product.title.trim().toLowerCase().includes(searchFor)) {
+            count++;
+            document.getElementById("table-body").innerHTML += `
+              <tr>
+                <th scope="row">${id + 1}</th>
+                <td>${product.title}</td>
+                <td>${product.price}</td>
+                <td>${product.tax}</td>
+                <td>${product.discount}</td>
+                <td>${product.total}</td>
+                <td>${product.quantity}</td>
+                <td>${product.category}</td>
+                <td><button class="btn btn-warning btn-sm" onclick="updateProduct(${product.id})">Update</button></td>
+                <td><button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Delete</button></td>
+              </tr>`;
+          } else if (searchBy === "category" && product.category.trim().toLowerCase().includes(searchFor)) {
+            count++;
+            document.getElementById("table-body").innerHTML += `
+              <tr>
+                <th scope="row">${id + 1}</th>
+                <td>${product.title}</td>
+                <td>${product.price}</td>
+                <td>${product.tax}</td>
+                <td>${product.discount}</td>
+                <td>${product.total}</td>
+                <td>${product.quantity}</td>
+                <td>${product.category}</td>
+                <td><button class="btn btn-warning btn-sm" onclick="updateProduct(${product.id})">Update</button></td>
+                <td><button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Delete</button></td>
+              </tr>`;
+          }
+        } else {
+        count++;
+        document.getElementById("table-body").innerHTML += `
+        <tr>
+          <th scope="row">${id + 1}</th>
+          <td>${product.title}</td>
+          <td>${product.price}</td>
+          <td>${product.tax}</td>
+          <td>${product.discount}</td>
+          <td>${product.total}</td>
+          <td>${product.quantity}</td>
+          <td>${product.category}</td>
+          <td><button class="btn btn-warning btn-sm" onclick="updateProduct(${product.id})">Update</button></td>
+          <td><button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Delete</button></td>
+        </tr>`;
+      }
+      });
     }
-    });
-  }
-  countProducts(count)
+    countProducts(count)
+  }, 4000);
 }
+
 
 // show Message when the form has submitted ___________
 function showNotice(text) {

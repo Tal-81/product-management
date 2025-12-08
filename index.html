@@ -34,23 +34,23 @@
        </div>
       <div class="mb-3">
         <label for="productname" class="form-label"></label>
-        <input type="text" class="form-control text-capitalize" id="productname" placeholder="Product Name*..." aria-label="productname" aria-describedby="product-name" maxlength="50" required>
+        <input type="text" class="form-control text-capitalize border-info" id="productname" placeholder="Product Name*..." aria-label="productname" aria-describedby="product-name" maxlength="50" required>
         <div class="form-text text-start ms-3">Product name should not contain on more then 50 letters.</div>
       </div>
       <!-- product price -->
       <div class="mb-3 d-flex justify-content-center gap-1">
-        <input type="number" class="form-control" id="productprice" placeholder="Price*" aria-label="productprice" aria-describedby="product-price" onchange="showTotal()" min="0"  required>
-        <input type="number" class="form-control" id="producttax" placeholder="Tax*" aria-label="producttax" aria-describedby="product-tax" onchange="showTotal()" min="0" required>
-        <input type="number" class="form-control" id="discount" placeholder="Discount" aria-label="discount" aria-describedby="discount" onchange="showTotal()" min="0">
+        <input type="number" class="form-control  border-info" id="productprice" placeholder="Price*" aria-label="productprice" aria-describedby="product-price" onchange="showTotal()" min="0"  required>
+        <input type="number" class="form-control  border-info" id="producttax" placeholder="Tax*" aria-label="producttax" aria-describedby="product-tax" onchange="showTotal()" min="0" required>
+        <input type="number" class="form-control  border-info" id="discount" placeholder="Discount" aria-label="discount" aria-describedby="discount" onchange="showTotal()" min="0">
         <span id="total" class="d-flex justify-content-start align-items-center rounded px-3 bg-primary text-white">Total:0</span>
       </div>
       <!-- product quantity -->
       <div class="mb-3">
-        <input type="number" class="form-control" id="productquantity" placeholder="Quantity*" min="1" max="1000" aria-label="productquantity" aria-describedby="product-quantity" required>
+        <input type="number" class="form-control border-info" id="productquantity" placeholder="Quantity*" min="1" max="1000" aria-label="productquantity" aria-describedby="product-quantity" required>
       </div>
       <!-- category -->
       <div class="mb-3">
-        <select class="form-select" id="category" aria-label="Default select Product" required>
+        <select class="form-select border-info" id="category" aria-label="Default select Product" required>
           <option value="" selected disabled>Category*</option>
           <option value="Acer">Acer</option>
           <option value="Hp">Hp</option>
@@ -70,15 +70,26 @@
       <h2 class="h4 mb-1 text-dark">Products List</h2>
       <span class="badge bg-primary opacity-75" id="products-count">0 product(s) available</span>
       <!--  ____  Products Filter  ____  -->
-      <div class="mb-3 mt-5">
-        <input type="text" class="form-control" id="search" placeholder="Search..." aria-label="Search" aria-describedby="Search" maxlength="50">
+      <div class="mt-5">
+        <input type="text" class="form-control border-bottom border-info" id="search" placeholder="Search..." aria-label="Search" aria-describedby="Search" maxlength="50">
       </div>
+
+          <!-- __start Guid design__ -->
+      <div class="row d-flex justify-content-center g-0">
+        <div class="col-4 border-end border-info" style="height: 40px;"></div>
+        <div class="col-4 border-info" style="height: 40px;"></div>
+      </div>
+      <div class="row d-flex justify-content-center g-0">
+        <div class="col-6 border border-bottom-0 border-info" style="height: 40px;">Search</div>
+      </div>
+          <!-- __end Guid design__ -->
+
       <div class="row g-1 mx-1 mb-2">
         <div class="col-6">
-          <button class="btn btn-primary w-100" id="btn-by-title">Search By Title</button>
+          <button class="btn btn-primary w-100" id="btn-by-title">By Title</button>
         </div>
         <div class="col-6">
-          <button class="btn btn-primary w-100" id="btn-by-Category">Search By Category</button>
+          <button class="btn btn-primary w-100" id="btn-by-Category">By Category</button>
         </div>
   
         <div class="col-12 mt-2">
@@ -105,6 +116,22 @@
               </tr>
             </thead>
             <tbody id="table-body">
+              <!-- start loading placeholder -->
+              <tr>
+                <td colspan="10" class="text-center">
+                  <p class="placeholder-glow">
+                    <span class="placeholder col-12"></span>
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="10" class="text-center">
+                  <p class="placeholder-wave">
+                    <span class="placeholder col-12"></span>
+                  </p>
+                </td>
+              </tr>
+              <!-- end loading placeholder -->
               <!-- table rows will be added here dynamically -->
             </tbody>
         </table>
