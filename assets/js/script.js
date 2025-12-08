@@ -16,12 +16,14 @@ let resultTotal = 0; // total result variable(price + tax - discount)
 let products = []; // products array
 
 
-// create products array ___________
+// call the products array ___________
 if (!localStorage.getItem("products")) {
   localStorage.setItem('products', JSON.stringify(products));
 } else {
   products = JSON.parse(localStorage.getItem("products"));
 }
+
+renderProducts(); // initial call to display products
 
 // show Message when the form has submitted ___________
 function showMsg(target, text) {
@@ -112,7 +114,7 @@ function showTotal() {
   total.innerText = "Total:" + result;
 }
 
-// create product ___________
+// create a new product ___________
 submit.addEventListener("click", (e)=> {
   e.preventDefault();
   submit.setAttribute("disabled", "true");
@@ -121,7 +123,6 @@ submit.addEventListener("click", (e)=> {
 
   if (!response) return; // if data is not valid, stop the function here
 
-  console.log(new Date().getTime().toLocaleString())
   let newProd = {
     id: new Date().getTime().toLocaleString(),
     title: title.value.trim().toLowerCase(),
@@ -137,31 +138,40 @@ submit.addEventListener("click", (e)=> {
 
   products.push(newProd); // add new product to products array
 
-  console.log(products);
   showMsg(null, "Product has been created successfully");
 
   localStorage.setItem("products", JSON.stringify(products));
+
+  products = JSON.parse(localStorage.getItem("products")) || [];
+
+  renderProducts();
 })
 
 // read data from localStorage ________
-products.forEach((product, id) => {
-  document.getElementById("table-body").innerHTML += `
-  <tr>
-    <th scope="row">${id + 1}</th>
-    <td>${product.title}</td>
-    <td>${product.price}</td>
-    <td>${product.tax}</td>
-    <td>${product.discount}</td>
-    <td>${product.total}</td>
-    <td>${product.quantity}</td>
-    <td>${product.category}</td>
-    <td><button class="btn btn-warning btn-sm">Update</button></td>
-    <td><button class="btn btn-danger btn-sm">Delete</button></td>
+function renderProducts() {
+  if (products.length == 0) {
+    document.getElementById("table-body").innerHTML += `
+    <tr><td colspan="10" class="text-center">No products available</td></tr>`;
+  }  else {
+    document.getElementById("table-body").innerHTML = ""; // clear table before rendering
+    products.forEach((product, id) => {
+      document.getElementById("table-body").innerHTML += `
+      <tr>
+        <th scope="row">${id + 1}</th>
+        <td>${product.title}</td>
+        <td>${product.price}</td>
+        <td>${product.tax}</td>
+        <td>${product.discount}</td>
+        <td>${product.total}</td>
+        <td>${product.quantity}</td>
+        <td>${product.category}</td>
+        <td><button class="btn btn-warning btn-sm">Update</button></td>
+        <td><button class="btn btn-danger btn-sm">Delete</button></td>
+      </tr>`;
+    });
+  }  
+}
 
-  </tr>
-  `;
-
-});
 
 
 // count products ___________
