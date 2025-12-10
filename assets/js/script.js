@@ -19,91 +19,96 @@ let resultTotal = 0; // resultTotal = price + tax - discount
 let products = []; // products array
 let count = 0; // Products are calculated based on search or total products
 
-
+// on window load ___________
+// placeholders will display in the table for 4 seconds
+// after that, products from localStorage will be rendered
+window.onload = function () {
+  this.setTimeout(() => {
+    renderProducts(); // initial call to display products
+  }, 4000);
+}
 // call products array when the page loads ___________
 if (!localStorage.getItem("products")) {
-  localStorage.setItem('products', JSON.stringify(products));
+  localStorage.setItem("products", JSON.stringify(products));
 } else {
   products = JSON.parse(localStorage.getItem("products"));
 }
 
-renderProducts(); // initial call to display products
+
 
 // show Message when the form has submitted ___________
 function showMsg(target, text) {
-  if(target !== null) {
+  if (target !== null) {
     target.style.background = "pink";
     target.focus();
-    target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    target.scrollIntoView({ block: "center", behavior: "smooth" });
     msg.style.color = "red"; // error case
   } else {
     msg.style.color = "green"; // success case
   }
   msg.innerText = text;
-  msg.classList.replace("invisible","visible");
-  setTimeout(()=> {
+  msg.classList.replace("invisible", "visible");
+  setTimeout(() => {
     if (target !== null) target.style.background = null;
-    msg.classList.replace("visible","invisible");
+    msg.classList.replace("visible", "invisible");
     msg.innerText = "";
-  }, 10000)
+  }, 10000);
 }
 
 // data validation before create or update product ___________
 function dataValidation() {
-      // re-enable submit button after 5 seconds___
-  setTimeout(()=> {
+  // re-enable submit button after 5 seconds___
+  setTimeout(() => {
     submit.removeAttribute("disabled");
     submit.textContent = "Create";
   }, 5000);
-      // title validation___
+  // title validation___
   if (!title.value.trim()) {
-    showMsg(title ,"⚠️Product title is required");
-    return
+    showMsg(title, "⚠️Product title is required");
+    return;
   }
 
   if (title.value.trim().length > 25) {
-    showMsg(title ,"⚠️Title should be less then 25 letters");
-    return
+    showMsg(title, "⚠️Title should be less then 25 letters");
+    return;
   }
-      // discount validation___
-  if (!discount.value || discount.value < 0 || isNaN(discount.value)) discount.value = 0;
-      // price & tax validation____ 
+  // discount validation___
+  if (!discount.value || discount.value < 0 || isNaN(discount.value))
+    discount.value = 0;
+  // price & tax validation____
   if (isNaN(price.value)) {
-    showMsg(price ,"⚠️allowed Just numbers in price field");
-    return
-
+    showMsg(price, "⚠️allowed Just numbers in price field");
+    return;
   } else if (!price.value || price.value < 1) {
-    showMsg(price ,"⚠️Invalid Price, should be more then 0");
-    return
-
+    showMsg(price, "⚠️Invalid Price, should be more then 0");
+    return;
   } else {
     if (isNaN(tax.value)) {
-      showMsg(tax ,"⚠️allowed Just numbers in tax field");
-      return
-
+      showMsg(tax, "⚠️allowed Just numbers in tax field");
+      return;
     } else if (!tax.value || tax.value < 0) {
       showMsg(tax, "⚠️Invalid Tax, should be not empty or negative");
-      return
-
+      return;
     } else {
-      resultTotal = parseInt(price.value) + parseInt(tax.value) - parseInt(discount.value);
+      resultTotal =
+        parseInt(price.value) + parseInt(tax.value) - parseInt(discount.value);
     }
   }
-      // quantity validation___
+  // quantity validation___
   if (isNaN(quantity.value)) {
-    showMsg(quantity ,"⚠️allowed Just numbers in quantity field");
-    return
+    showMsg(quantity, "⚠️allowed Just numbers in quantity field");
+    return;
   }
 
   if (!quantity.value || quantity.value < 1 || quantity.value > 1000) {
-    showMsg(quantity ,"⚠️Between 1 and 1000 allowed in quantity");
-    return
+    showMsg(quantity, "⚠️Between 1 and 1000 allowed in quantity");
+    return;
   }
 
-      // category validation___
+  // category validation___
   if (!category.value || category.value === "Category*") {
-    showMsg(category ,"⚠️Product category is required");
-    return
+    showMsg(category, "⚠️Product category is required");
+    return;
   }
   return true;
 }
@@ -119,22 +124,28 @@ function showTotal() {
   if (discount.value < 0) {
     discount.value = "0";
   }
-  let result = parseInt(price.value || 1) + parseInt(tax.value || 0) - parseInt(discount.value || 0);
+  let result =
+    parseInt(price.value || 1) +
+    parseInt(tax.value || 0) -
+    parseInt(discount.value || 0);
   total.innerText = "Total:" + result;
 }
 
 // create a new product ___________
-submit.addEventListener("click", (e)=> {
+submit.addEventListener("click", (e) => {
   e.preventDefault();
   submit.setAttribute("disabled", "true");
-  submit.innerHTML = "<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='currentColor' class='bi bi-hourglass-split' viewBox='0 0 16 16'><path d='M2.5 15a.5.5 0 1 1 0-1h1v-1a4.5 4.5 0 0 1 2.557-4.06c.29-.139.443-.377.443-.59v-.7c0-.213-.154-.451-.443-.59A4.5 4.5 0 0 1 3.5 3V2h-1a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-1v1a4.5 4.5 0 0 1-2.557 4.06c-.29.139-.443.377-.443.59v.7c0 .213.154.451.443.59A4.5 4.5 0 0 1 12.5 13v1h1a.5.5 0 0 1 0 1zm2-13v1c0 .537.12 1.045.337 1.5h6.326c.216-.455.337-.963.337-1.5V2zm3 6.35c0 .701-.478 1.236-1.011 1.492A3.5 3.5 0 0 0 4.5 13s.866-1.299 3-1.48zm1 0v3.17c2.134.181 3 1.48 3 1.48a3.5 3.5 0 0 0-1.989-3.158C8.978 9.586 8.5 9.052 8.5 8.351z'/></svg>";
+  submit.innerHTML =
+    "<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='currentColor' class='bi bi-hourglass-split' viewBox='0 0 16 16'><path d='M2.5 15a.5.5 0 1 1 0-1h1v-1a4.5 4.5 0 0 1 2.557-4.06c.29-.139.443-.377.443-.59v-.7c0-.213-.154-.451-.443-.59A4.5 4.5 0 0 1 3.5 3V2h-1a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-1v1a4.5 4.5 0 0 1-2.557 4.06c-.29.139-.443.377-.443.59v.7c0 .213.154.451.443.59A4.5 4.5 0 0 1 12.5 13v1h1a.5.5 0 0 1 0 1zm2-13v1c0 .537.12 1.045.337 1.5h6.326c.216-.455.337-.963.337-1.5V2zm3 6.35c0 .701-.478 1.236-1.011 1.492A3.5 3.5 0 0 0 4.5 13s.866-1.299 3-1.48zm1 0v3.17c2.134.181 3 1.48 3 1.48a3.5 3.5 0 0 0-1.989-3.158C8.978 9.586 8.5 9.052 8.5 8.351z'/></svg>";
   let response = dataValidation();
 
   if (!response) return; // if data is not valid, stop the function here
 
   if (inputHidden.value) {
     // update existing product
-    let productIndex = products.findIndex(prod => prod.id === parseInt(inputHidden.value));
+    let productIndex = products.findIndex(
+      (prod) => prod.id === parseInt(inputHidden.value)
+    );
     products[productIndex] = {
       id: products[productIndex].id,
       title: title.value.trim().toLowerCase(),
@@ -144,7 +155,7 @@ submit.addEventListener("click", (e)=> {
       total: resultTotal,
       quantity: parseInt(quantity.value),
       category: category.value,
-    }
+    };
     inputHidden.value = "";
     showNotice("Product has been updated successfully");
   } else {
@@ -158,25 +169,24 @@ submit.addEventListener("click", (e)=> {
       total: resultTotal,
       quantity: parseInt(quantity.value),
       category: category.value,
-    }
+    };
     products.push(newProd); // add new product to products array
     showMsg(null, "Product has been created successfully");
   }
 
-  document.getElementsByTagName('form')[0].reset(); // clear inputs
+  document.getElementsByTagName("form")[0].reset(); // clear inputs
 
   localStorage.setItem("products", JSON.stringify(products));
   products = JSON.parse(localStorage.getItem("products")) || [];
 
   renderProducts();
-})
-
+});
 
 // distribute products to table rows ___________
 // separated function to avoid code duplication-----
 //used in renderProducts() function-----
-function distributeProducts(product,id) {
-  return  document.getElementById("table-body").innerHTML += `
+function distributeProducts(product, id) {
+  return (document.getElementById("table-body").innerHTML += `
               <tr>
                 <th scope="row">${id + 1}</th>
                 <td>${product.title}</td>
@@ -186,61 +196,69 @@ function distributeProducts(product,id) {
                 <td>${product.total}</td>
                 <td>${product.quantity}</td>
                 <td>${product.category}</td>
-                <td><button class="btn btn-warning btn-sm" onclick="updateProduct(${product.id})">Update</button></td>
-                <td><button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Delete</button></td>
-              </tr>`;
+                <td><button class="btn btn-warning btn-sm" onclick="updateProduct(${
+                  product.id
+                })">Update</button></td>
+                <td><button class="btn btn-danger btn-sm" onclick="deleteProduct(${
+                  product.id
+                })">Delete</button></td>
+              </tr>`);
 }
 
 // displaying data(products) in a table from localStorage ________
-function renderProducts(searchBy="title", searchFor="") {
-  // setTimeout(()=> {
-  
+function renderProducts(searchBy = "title", searchFor = "") {
     let count = 0; // reset count for each render
+
     if (products.length == 0) {
       document.getElementById("table-body").innerHTML = `
       <tr><td colspan="10" class="text-start text-md-center">No products available</td></tr>`;
-    }  else {
+    } else {
       document.getElementById("table-body").innerHTML = ""; // clear table before rendering
       products.forEach((product, id) => {
         if (searchFor !== "") {
-          if (searchBy === "title" && product.title.trim().toLowerCase().includes(searchFor)) {
+          if (
+            searchBy === "title" &&
+            product.title.trim().toLowerCase().includes(searchFor)
+          ) {
             count++;
-            distributeProducts(product,id);
-          } else if (searchBy === "category" && product.category.trim().toLowerCase().includes(searchFor)) {
+            distributeProducts(product, id);
+          } else if (
+            searchBy === "category" &&
+            product.category.trim().toLowerCase().includes(searchFor)
+          ) {
             count++;
-            distributeProducts(product,id);
+            distributeProducts(product, id);
           }
         } else {
-        count++;
-        distributeProducts(product,id);
-      }
+          count++;
+          distributeProducts(product, id);
+        }
       });
     }
-    countProducts(count)
-  // }, 4000);
+    countProducts(count);
 }
-
 
 // show Message when update, delete one product or all products ___________
 function showNotice(text) {
   notice.style.color = "green";
   notice.innerText = text;
-  notice.classList.replace("invisible","visible");
-  setTimeout(()=> {
-    notice.classList.replace("visible","invisible");
+  notice.classList.replace("invisible", "visible");
+  setTimeout(() => {
+    notice.classList.replace("visible", "invisible");
     notice.innerText = "";
-  }, 10000)
+  }, 10000);
 }
 
 // count all products or filtered products by search ___________
 function countProducts(count) {
-  document.getElementById("products-count").innerText = +count + " product(s) available";
+  document.getElementById("products-count").innerText =
+    +count + " product(s) available";
   return count;
 }
 
 // delete one product ___________
 function deleteProduct(productId) {
-  products = products.filter(prod => prod.id !== productId);
+  products = products.filter((prod) => prod.id !== productId);
 
   showNotice("Product has been deleted successfully");
 
@@ -252,10 +270,10 @@ function deleteProduct(productId) {
 
 // update product ___________
 function updateProduct(productId) {
-  let productIndex = products.findIndex(prod => prod.id === productId);
+  let productIndex = products.findIndex((prod) => prod.id === productId);
   let targetProduct = products[productIndex];
 
-    // fill all input fields
+  // fill all input fields
   inputHidden.value = targetProduct.id;
   title.value = targetProduct.title;
   price.value = targetProduct.price;
@@ -265,12 +283,12 @@ function updateProduct(productId) {
   quantity.value = targetProduct.quantity;
   category.value = targetProduct.category;
   submit.innerText = "Update";
-    // scroll to title input after clicking update
-  title.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  // scroll to title input after clicking update
+  title.scrollIntoView({ block: "center", behavior: "smooth" });
 }
 
 // search for product by title
-btnByTitle.addEventListener("click", ()=> {
+btnByTitle.addEventListener("click", () => {
   if (search.value.trim() === "") {
     return showNotice("⚠️Please enter a search term");
   }
@@ -278,7 +296,7 @@ btnByTitle.addEventListener("click", ()=> {
 });
 
 // search for product by category
-btnByCategory.addEventListener("click", ()=> {
+btnByCategory.addEventListener("click", () => {
   if (search.value.trim() === "") {
     return showNotice("⚠️Please enter a search term");
   }
@@ -286,13 +304,13 @@ btnByCategory.addEventListener("click", ()=> {
 });
 
 // cancel search reuslts and display all products ___________
-cancelSearch.addEventListener("click", ()=> {
+cancelSearch.addEventListener("click", () => {
   search.value = "";
   renderProducts();
 });
 
 // delete all products ___________
-btnDeleteAll.addEventListener("click", ()=> {
+btnDeleteAll.addEventListener("click", () => {
   if (products.length === 0) {
     return showNotice("⚠️No products to delete");
   }

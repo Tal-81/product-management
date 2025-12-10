@@ -5,7 +5,8 @@
   box-sizing: border-box;
 }
 
-body, html {
+body,
+html {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
@@ -52,7 +53,8 @@ body, html {
 }
 
 /* --- message and notice  --- */
-#message, #notice {
+#message,
+#notice {
   font-size: 1rem;
   font-weight: 500;
   line-height: 30px;
