@@ -11,15 +11,16 @@ let submit = document.getElementById("submit");
 let msg = document.getElementById("message");
 let notice = document.getElementById("notice");
 let search = document.getElementById("search");
+let cancelSearch = document.getElementById("cancel-search");
 let btnByTitle = document.getElementById("btn-by-title");
 let btnByCategory = document.getElementById("btn-by-Category");
 let btnDeleteAll = document.getElementById("btn-delete-all");
-let resultTotal = 0; // total result variable(price + tax - discount)
+let resultTotal = 0; // resultTotal = price + tax - discount
 let products = []; // products array
-let count = 0; // products count based on search or total
+let count = 0; // Products are calculated based on search or total products
 
 
-// call the products array ___________
+// call products array when the page loads ___________
 if (!localStorage.getItem("products")) {
   localStorage.setItem('products', JSON.stringify(products));
 } else {
@@ -47,36 +48,36 @@ function showMsg(target, text) {
   }, 10000)
 }
 
-// data validation ___________
+// data validation before create or update product ___________
 function dataValidation() {
-      // re-enable submit button after 10 seconds___
+      // re-enable submit button after 5 seconds___
   setTimeout(()=> {
     submit.removeAttribute("disabled");
     submit.textContent = "Create";
   }, 5000);
       // title validation___
   if (!title.value.trim()) {
-    showMsg(title ,"Product title is required");
+    showMsg(title ,"⚠️Product title is required");
     return
   }
-
+      // discount validation___
   if (!discount.value || discount.value < 0 || isNaN(discount.value)) discount.value = 0;
       // price & tax validation____ 
   if (isNaN(price.value)) {
-    showMsg(price ,"allowed, Just numbers in price field");
+    showMsg(price ,"⚠️allowed Just numbers in price field");
     return
 
   } else if (!price.value || price.value < 1) {
-    showMsg(price ,"Invalid Price, should be more then 0");
+    showMsg(price ,"⚠️Invalid Price, should be more then 0");
     return
 
   } else {
     if (isNaN(tax.value)) {
-      showMsg(tax ,"allowed, Just numbers in tax field");
+      showMsg(tax ,"⚠️allowed Just numbers in tax field");
       return
 
     } else if (!tax.value || tax.value < 0) {
-      showMsg(tax, "Invalid Tax, should be not empty or negative");
+      showMsg(tax, "⚠️Invalid Tax, should be not empty or negative");
       return
 
     } else {
@@ -85,18 +86,18 @@ function dataValidation() {
   }
       // quantity validation___
   if (isNaN(quantity.value)) {
-    showMsg(quantity ,"allowed, Just numbers in quantity field");
+    showMsg(quantity ,"⚠️allowed Just numbers in quantity field");
     return
   }
 
   if (!quantity.value || quantity.value < 1 || quantity.value > 1000) {
-    showMsg(quantity ,"Between 1 and 1000 allowed in quantity");
+    showMsg(quantity ,"⚠️Between 1 and 1000 allowed in quantity");
     return
   }
 
       // category validation___
   if (!category.value || category.value === "Category*") {
-    showMsg(category ,"Product category is required");
+    showMsg(category ,"⚠️Product category is required");
     return
   }
   return true;
@@ -165,73 +166,57 @@ submit.addEventListener("click", (e)=> {
   renderProducts();
 })
 
-// read data from localStorage ________
+
+// distribute products to table rows ___________
+// separated function to avoid code duplication-----
+//used in renderProducts() function-----
+function distributeProducts(product,id) {
+  return  document.getElementById("table-body").innerHTML += `
+              <tr>
+                <th scope="row">${id + 1}</th>
+                <td>${product.title}</td>
+                <td>${product.price}</td>
+                <td>${product.tax}</td>
+                <td>${product.discount}</td>
+                <td>${product.total}</td>
+                <td>${product.quantity}</td>
+                <td>${product.category}</td>
+                <td><button class="btn btn-warning btn-sm" onclick="updateProduct(${product.id})">Update</button></td>
+                <td><button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Delete</button></td>
+              </tr>`;
+}
+
+// displaying data(products) in a table from localStorage ________
 function renderProducts(searchBy="title", searchFor="") {
-  setTimeout(()=> {
+  // setTimeout(()=> {
   
     let count = 0; // reset count for each render
     if (products.length == 0) {
       document.getElementById("table-body").innerHTML = `
-      <tr><td colspan="10" class="text-center">No products available</td></tr>`;
+      <tr><td colspan="10" class="text-start text-md-center">No products available</td></tr>`;
     }  else {
       document.getElementById("table-body").innerHTML = ""; // clear table before rendering
       products.forEach((product, id) => {
         if (searchFor !== "") {
           if (searchBy === "title" && product.title.trim().toLowerCase().includes(searchFor)) {
             count++;
-            document.getElementById("table-body").innerHTML += `
-              <tr>
-                <th scope="row">${id + 1}</th>
-                <td>${product.title}</td>
-                <td>${product.price}</td>
-                <td>${product.tax}</td>
-                <td>${product.discount}</td>
-                <td>${product.total}</td>
-                <td>${product.quantity}</td>
-                <td>${product.category}</td>
-                <td><button class="btn btn-warning btn-sm" onclick="updateProduct(${product.id})">Update</button></td>
-                <td><button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Delete</button></td>
-              </tr>`;
+            distributeProducts(product,id);
           } else if (searchBy === "category" && product.category.trim().toLowerCase().includes(searchFor)) {
             count++;
-            document.getElementById("table-body").innerHTML += `
-              <tr>
-                <th scope="row">${id + 1}</th>
-                <td>${product.title}</td>
-                <td>${product.price}</td>
-                <td>${product.tax}</td>
-                <td>${product.discount}</td>
-                <td>${product.total}</td>
-                <td>${product.quantity}</td>
-                <td>${product.category}</td>
-                <td><button class="btn btn-warning btn-sm" onclick="updateProduct(${product.id})">Update</button></td>
-                <td><button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Delete</button></td>
-              </tr>`;
+            distributeProducts(product,id);
           }
         } else {
         count++;
-        document.getElementById("table-body").innerHTML += `
-        <tr>
-          <th scope="row">${id + 1}</th>
-          <td>${product.title}</td>
-          <td>${product.price}</td>
-          <td>${product.tax}</td>
-          <td>${product.discount}</td>
-          <td>${product.total}</td>
-          <td>${product.quantity}</td>
-          <td>${product.category}</td>
-          <td><button class="btn btn-warning btn-sm" onclick="updateProduct(${product.id})">Update</button></td>
-          <td><button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Delete</button></td>
-        </tr>`;
+        distributeProducts(product,id);
       }
       });
     }
     countProducts(count)
-  }, 4000);
+  // }, 4000);
 }
 
 
-// show Message when the form has submitted ___________
+// show Message when update, delete one product or all products ___________
 function showNotice(text) {
   notice.style.color = "green";
   notice.innerText = text;
@@ -242,13 +227,13 @@ function showNotice(text) {
   }, 10000)
 }
 
-// count products ___________
+// count all products or filtered products by search ___________
 function countProducts(count) {
   document.getElementById("products-count").innerText = +count + " product(s) available";
   return count;
 }
 
-// delete product ___________
+// delete one product ___________
 function deleteProduct(productId) {
   products = products.filter(prod => prod.id !== productId);
 
@@ -275,30 +260,35 @@ function updateProduct(productId) {
   quantity.value = targetProduct.quantity;
   category.value = targetProduct.category;
   submit.innerText = "Update";
-
+    // scroll to title input after clicking update
   title.scrollIntoView({ block: 'center', behavior: 'smooth' });
 }
 
-// search product by title
+// search for product by title
 btnByTitle.addEventListener("click", ()=> {
   if (search.value.trim() === "") {
-    return showNotice("Please enter a search term");
+    return showNotice("⚠️Please enter a search term");
   }
   renderProducts("title", search.value.trim().toLowerCase());
 });
 
-// search product by category
+// search for product by category
 btnByCategory.addEventListener("click", ()=> {
   if (search.value.trim() === "") {
-    return showNotice("Please enter a search term");
+    return showNotice("⚠️Please enter a search term");
   }
   renderProducts("category", search.value.trim().toLowerCase());
+});
+
+cancelSearch.addEventListener("click", ()=> {
+  search.value = "";
+  renderProducts();
 });
 
 // delete all products ___________
 btnDeleteAll.addEventListener("click", ()=> {
   if (products.length === 0) {
-    return showNotice("No products to delete");
+    return showNotice("⚠️No products to delete");
   }
   products = [];
   showNotice("All products have been deleted successfully");

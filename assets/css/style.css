@@ -1,13 +1,57 @@
+/* --- global reset --- */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+body, html {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* --- header --- */
 .container-fluid span {
   color: yellow !important;
 }
 
+/* --- cancel search button --- */
+#search-container {
+  position: relative;
+}
+
+#cancel-search {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  outline: none;
+}
+
+#cancel-search:active {
+  border: none;
+}
+
+#search-container svg:hover path:last-child {
+  fill: #ffffff;
+}
+
+#search-container path:last-child {
+  fill: gray;
+}
+
+#search-container svg {
+  outline: none;
+}
+
+#search-container svg:hover {
+  cursor: pointer;
+  background-color: #0dcaf0;
+  border-radius: 4px;
+}
+
+/* --- message and notice  --- */
 #message, #notice {
   font-size: 1rem;
   font-weight: 500;
