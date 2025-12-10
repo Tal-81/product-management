@@ -60,6 +60,11 @@ function dataValidation() {
     showMsg(title ,"⚠️Product title is required");
     return
   }
+
+  if (title.value.trim().length > 25) {
+    showMsg(title ,"⚠️Title should be less then 25 letters");
+    return
+  }
       // discount validation___
   if (!discount.value || discount.value < 0 || isNaN(discount.value)) discount.value = 0;
       // price & tax validation____ 
@@ -280,6 +285,7 @@ btnByCategory.addEventListener("click", ()=> {
   renderProducts("category", search.value.trim().toLowerCase());
 });
 
+// cancel search reuslts and display all products ___________
 cancelSearch.addEventListener("click", ()=> {
   search.value = "";
   renderProducts();
