@@ -7,6 +7,11 @@
   <meta name="description" content="Manage your products efficiently with our Products Management system.">
   <meta name="keywords" content="products, management, inventory, sales, ecommerce, business, management system">
   <title>Products Management</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16x16.png">
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+  <link rel="manifest" href="site.webmanifest">
   <!-- bootstrap css -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
@@ -97,7 +102,7 @@
           </span>
         </button>
       </div>
-      <!-- __start Guid design__ -->
+      <!-- __start Path design__ -->
       <div class="row d-flex justify-content-center g-0">
         <div class="col-4 border-end border-info" style="height: 20px;"></div>
         <div class="col-4 border-info" style="height: 20px;"></div>
@@ -105,7 +110,7 @@
       <div class="row d-flex justify-content-center g-0">
         <div class="col-6 border border-bottom-0 border-info" style="height: 20px;"></div>
       </div>
-      <!-- __end Guid design__ -->
+      <!-- __end Path design__ -->
       <div class="row g-1 mx-1 mb-2">
         <div class="col-6">
           <button class="btn btn-primary w-100" id="btn-by-title">By Title</button>
@@ -121,7 +126,7 @@
 
       <p class="visible text-center" id="notice"></p>
       <!--  ____  Products Table  ____  -->
-      <div class="overflow-x-auto border border-white rounded-3">
+      <div class="overflow-x-auto border border-white rounded-3" id="table-container">
         <table class="table table-success table-striped table-hover">
           <thead>
             <tr>
@@ -157,6 +162,12 @@
             <!-- table rows will be added here dynamically -->
           </tbody>
         </table>
+        <!-- ____  Pagination  ____ -->
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+            <!-- pagination items will be added here dynamically by js-->
+          </ul>
+        </nav>
       </div>
     </div>
   </div>

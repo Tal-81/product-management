@@ -15,6 +15,8 @@ let cancelSearch = document.getElementById("cancel-search");
 let btnByTitle = document.getElementById("btn-by-title");
 let btnByCategory = document.getElementById("btn-by-Category");
 let btnDeleteAll = document.getElementById("btn-delete-all");
+let paginationContainer = document.querySelector(".pagination");
+let btnPage = document.querySelectorAll(".page-item");
 let resultTotal = 0; // resultTotal = price + tax - discount
 let products = []; // products array
 let count = 0; // Products are calculated based on search or total products
@@ -131,7 +133,7 @@ function showTotal() {
   total.innerText = "Total:" + result;
 }
 
-// create a new product ___________
+// create a new product or update existing product ___________
 submit.addEventListener("click", (e) => {
   e.preventDefault();
   submit.setAttribute("disabled", "true");
@@ -172,15 +174,42 @@ submit.addEventListener("click", (e) => {
     };
     products.push(newProd); // add new product to products array
     showMsg(null, "Product has been created successfully");
+    createPaginationButtons(true);
   }
 
   document.getElementsByTagName("form")[0].reset(); // clear inputs
 
   localStorage.setItem("products", JSON.stringify(products));
   products = JSON.parse(localStorage.getItem("products")) || [];
-
+  sayToPagination = false;
   renderProducts();
 });
+
+function createPaginationButtons(sayToPagination=false) {
+  if (paginationContainer.children.length === 0 || sayToPagination) {
+    console.log(sayToPagination)
+      paginationContainer.innerHTML = `
+        <li class="page-item" onclick="pagination(this)" data-page="Previous">
+          <a class="page-link bg bg-light text-primary" href="#table-container" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>`;
+      let numberOfPage = 0;
+      for (let i = 0; i < products.length; i += 3) {
+      numberOfPage++;
+      paginationContainer.innerHTML += `
+        <li class="page-item" onclick="pagination(this)" data-page="${numberOfPage}">
+          <a class="page-link bg bg-light text-primary" href="#table-container" role="button">${numberOfPage}</a>
+        </li>`;
+      }
+      paginationContainer.innerHTML += `
+        <li class="page-item" onclick="pagination(this)" data-page="next">
+          <a class="page-link bg bg-light text-primary" href="#table-container" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>`;
+    }
+}
 
 // distribute products to table rows ___________
 // separated function to avoid code duplication-----
@@ -206,22 +235,28 @@ function distributeProducts(product, id) {
 }
 
 // displaying data(products) in a table from localStorage ________
-function renderProducts(searchBy = "title", searchFor = "") {
-    let count = 0; // reset count for each render
+function renderProducts(searchBy = "title", searchFor = "", firstItem = 0) {
+  let count = 0; // reset count for each render
 
-    if (products.length == 0) {
-      document.getElementById("table-body").innerHTML = `
-      <tr><td colspan="10" class="text-start text-md-center">No products available</td></tr>`;
-    } else {
-      document.getElementById("table-body").innerHTML = ""; // clear table before rendering
-      products.forEach((product, id) => {
+  if (products.length == 0) {
+    document.getElementById("table-body").innerHTML = `
+    <tr><td colspan="10" class="text-start text-md-center">No products available</td></tr>`;
+  } else {
+    document.getElementById("table-body").innerHTML = ""; // clear table before rendering
+
+    // create pagination buttons dynamically________
+    // execute if pagination container is empty when loading page or create a new product
+    createPaginationButtons(false);
+
+    // loop through products array and display each product in a table row
+    products.forEach((product, id) => {
         if (searchFor !== "") {
           if (
             searchBy === "title" &&
             product.title.trim().toLowerCase().includes(searchFor)
           ) {
             count++;
-            distributeProducts(product, id);
+            distributeProducts(product, id); 
           } else if (
             searchBy === "category" &&
             product.category.trim().toLowerCase().includes(searchFor)
@@ -229,13 +264,16 @@ function renderProducts(searchBy = "title", searchFor = "") {
             count++;
             distributeProducts(product, id);
           }
+          paginationContainer.style.visibility = "hidden";// hide pagination during search
+          console.log(btnPage[0].innerHTML);
         } else {
-          count++;
-          distributeProducts(product, id);
+          if (id === firstItem || id === (firstItem +1) || id === (firstItem + 2)) {
+            distributeProducts(product, id);
+          }
         }
-      });
-    }
-    countProducts(count);
+    });
+  }
+  countProducts(products.length);
 }
 
 // show Message when update, delete one product or all products ___________
@@ -265,6 +303,8 @@ function deleteProduct(productId) {
   localStorage.setItem("products", JSON.stringify(products));
   products = JSON.parse(localStorage.getItem("products")) || [];
 
+  createPaginationButtons(true);
+    
   renderProducts();
 }
 
@@ -306,6 +346,7 @@ btnByCategory.addEventListener("click", () => {
 // cancel search reuslts and display all products ___________
 cancelSearch.addEventListener("click", () => {
   search.value = "";
+  paginationContainer.style.visibility = "visible";
   renderProducts();
 });
 
@@ -319,3 +360,50 @@ btnDeleteAll.addEventListener("click", () => {
   localStorage.removeItem("products");
   renderProducts();
 });
+
+// pagination
+function pagination(eventTarget) {
+  let currentPage = document.querySelector(".page-item.active");
+
+  btnPage.forEach((btn) => {
+    btn.classList.remove("active");
+  });
+  eventTarget.classList.add("active");
+  numberPage = eventTarget.dataset.page;
+
+
+
+  if (numberPage === "Previous") {
+    if (currentPage === null || currentPage.dataset.page === "1") {
+      numberPage = 1;
+    } else {
+      numberPage = parseInt(currentPage.dataset.page) - 1;
+      console.log(btnPage[numberPage]);
+      eventTarget = btnPage[numberPage];
+      eventTarget.classList.add("active");
+    }
+  } else if (numberPage === "next") {
+    if (currentPage === null || currentPage.dataset.page == btnPage.length - 2) {
+      numberPage = btnPage.length - 2; // last page number
+    } else {
+      numberPage = parseInt(currentPage.dataset.page) + 1;
+      eventTarget = btnPage[numberPage];
+      eventTarget.classList.add("active");
+    } 
+  }
+
+
+
+  // next.dataset.page = parseInt(numberPage) + 1;
+  // previous.dataset.page = parseInt(numberPage) - 1;
+
+  let pages = Math.ceil(products.length / 3); // 3 means 3 products per page
+  // 0     = (3 * 1) - 3
+  // 3     = (3 * 2) - 3
+  // 6     = (3 * 3) - 3
+  // 9     = (3 * 4) - 3
+  firstItem = (3 * numberPage) - 3 // firstItem means first index for each page
+  // secondItem = firstItem + 1
+  // thirdItem = firstItem + 2
+  renderProducts("title", "", firstItem);
+}

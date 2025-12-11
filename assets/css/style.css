@@ -68,3 +68,9 @@ html {
 #notice {
   height: 20px;
 }
+
+/* --- table --- */
+#table-container {
+  width: 100%;
+  overflow-x: auto;
+}
