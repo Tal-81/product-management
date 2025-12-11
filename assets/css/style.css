@@ -70,6 +70,17 @@ html {
 }
 
 /* --- table --- */
+#notice,
+table {
+  user-select: none;
+  caret-color: transparent; /* pointer(caret) will be hidden*/
+}
+
+thead,
+tbody {
+  user-select: text;
+}
+
 #table-container {
   width: 100%;
   overflow-x: auto;

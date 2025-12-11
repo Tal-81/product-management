@@ -159,7 +159,7 @@ submit.addEventListener("click", (e) => {
       category: category.value,
     };
     inputHidden.value = "";
-    showNotice("Product has been updated successfully");
+    showMsg(null, "Product has been updated successfully");
   } else {
     // continue to create new product
     let newProd = {
