@@ -358,12 +358,15 @@ btnDeleteAll.addEventListener("click", () => {
   products = [];
   showNotice("All products have been deleted successfully");
   localStorage.removeItem("products");
+  createPaginationButtons(true);
+  
   renderProducts();
 });
 
 // pagination
 function pagination(eventTarget) {
   let currentPage = document.querySelector(".page-item.active");
+  console.log(currentPage, "  --> currentPage")
 
   btnPage.forEach((btn) => {
     btn.classList.remove("active");
