@@ -273,7 +273,7 @@ function renderProducts(searchBy = "title", searchFor = "", firstItem = 0) {
         }
     });
   }
-  if ( count ) { // if count not equal zero
+  if ( !count && !searchFor) { // if count equal zero
     countProducts(products.length);
   } else {
     countProducts(count);

@@ -45,18 +45,18 @@
       <div class="mb-3">
         <label for="productname" class="form-label"></label>
         <input type="text" class="form-control text-capitalize border-info" id="productname"
-          placeholder="Product Name*..." aria-label="productname" aria-describedby="product-name" maxlength="25"
+          placeholder="Product Name*..." aria-label="product-name" aria-describedby="product-name" maxlength="25"
           required>
-        <div class="form-text text-start ms-3">Product name should not contain more then 25 letters.</div>
+        <div class="form-text text-start ms-3" id="product-name">Product name should not contain more then 25 letters.</div>
       </div>
       <!-- product price -->
       <div class="mb-3 d-flex justify-content-center gap-1">
         <input type="number" class="form-control  border-info" id="productprice" placeholder="Price*"
-          aria-label="productprice" aria-describedby="product-price" onchange="showTotal()" min="0" required>
+          aria-label="productprice" onchange="showTotal()" min="0" required>
         <input type="number" class="form-control  border-info" id="producttax" placeholder="Tax*"
-          aria-label="producttax" aria-describedby="product-tax" onchange="showTotal()" min="0" required>
+          aria-label="producttax" onchange="showTotal()" min="0" required>
         <input type="number" class="form-control  border-info" id="discount" placeholder="Discount"
-          aria-label="discount" aria-describedby="discount" onchange="showTotal()" min="0">
+          aria-label="discount" onchange="showTotal()" min="0">
         <span id="total"
           class="d-flex justify-content-start align-items-center rounded px-3 bg-primary text-white">Total:0</span>
       </div>
