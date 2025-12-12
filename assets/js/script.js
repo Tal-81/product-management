@@ -364,7 +364,15 @@ btnDeleteAll.addEventListener("click", () => {
 
 // pagination
 function pagination(eventTarget) {
+  // in case deleted all products and just still [Next & Previous] 
+  // pagination process will not works.
+  if (eventTarget.parentElement.children.length === 2) {
+    return;
+  }
+
   let currentPage = document.querySelector(".page-item.active");
+  // in this function can we call all page buttons not outside this function
+  // because the buttons created after DOM not like other HTML elements.
   let btnPage = document.querySelectorAll(".page-item");
 
   btnPage.forEach((btn) => {
@@ -399,9 +407,10 @@ function pagination(eventTarget) {
     eventTarget.classList.add("active");
   }
 
-  let pages = Math.ceil(products.length / 3); // 3 means 3 products per page
+  let pages = Math.ceil(products.length / 5); // 5 means 5 products per page
 
-  firstItem = (3 * numberPage) - 3 // firstItem means first index for each page
+  //  The line below: 5 means --> every page has 5 products  
+  firstItem = (5 * numberPage) - 5 // firstItem means first index for each page
   // secondItem = firstItem + 1
   // thirdItem = firstItem + 2
   renderProducts("title", "", firstItem);
