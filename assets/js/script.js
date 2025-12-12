@@ -16,19 +16,20 @@ let btnByTitle = document.getElementById("btn-by-title");
 let btnByCategory = document.getElementById("btn-by-Category");
 let btnDeleteAll = document.getElementById("btn-delete-all");
 let paginationContainer = document.querySelector(".pagination");
-let btnPage = document.querySelectorAll(".page-item");
+
 let resultTotal = 0; // resultTotal = price + tax - discount
 let products = []; // products array
 let count = 0; // Products are calculated based on search or total products
 
 // on window load ___________
 // placeholders will display in the table for 4 seconds
-// after that, products from localStorage will be rendered
-window.onload = function () {
-  this.setTimeout(() => {
+// after that, products from localStorage will be display in the table.
+document.addEventListener('DOMContentLoaded', function () {
+  setTimeout(() => {
     renderProducts(); // initial call to display products
   }, 4000);
-}
+});
+
 // call products array when the page loads ___________
 if (!localStorage.getItem("products")) {
   localStorage.setItem("products", JSON.stringify(products));
@@ -178,6 +179,7 @@ submit.addEventListener("click", (e) => {
   }
 
   document.getElementsByTagName("form")[0].reset(); // clear inputs
+  total.innerText = "Total:0";
 
   localStorage.setItem("products", JSON.stringify(products));
   products = JSON.parse(localStorage.getItem("products")) || [];
@@ -185,12 +187,13 @@ submit.addEventListener("click", (e) => {
   renderProducts();
 });
 
+// create Pagination buttons when page loading or [create, delete or delete-all] product
 function createPaginationButtons(sayToPagination=false) {
   if (paginationContainer.children.length === 0 || sayToPagination) {
     console.log(sayToPagination)
       paginationContainer.innerHTML = `
         <li class="page-item" onclick="pagination(this)" data-page="Previous">
-          <a class="page-link bg bg-light text-primary" href="#table-container" aria-label="Previous">
+          <a class="page-link bg bg-light text-primary" href="#table-container" role="button" aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>`;
@@ -203,8 +206,8 @@ function createPaginationButtons(sayToPagination=false) {
         </li>`;
       }
       paginationContainer.innerHTML += `
-        <li class="page-item" onclick="pagination(this)" data-page="next">
-          <a class="page-link bg bg-light text-primary" href="#table-container" aria-label="Next">
+        <li class="page-item" onclick="pagination(this)" data-page="Next">
+          <a class="page-link bg bg-light text-primary" href="#table-container" role="button" aria-label="Next">
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>`;
@@ -265,7 +268,6 @@ function renderProducts(searchBy = "title", searchFor = "", firstItem = 0) {
             distributeProducts(product, id);
           }
           paginationContainer.style.visibility = "hidden";// hide pagination during search
-          console.log(btnPage[0].innerHTML);
         } else {
           if (id === firstItem || id === (firstItem +1) || id === (firstItem + 2)) {
             distributeProducts(product, id);
@@ -366,14 +368,15 @@ btnDeleteAll.addEventListener("click", () => {
 // pagination
 function pagination(eventTarget) {
   let currentPage = document.querySelector(".page-item.active");
-  console.log(currentPage, "  --> currentPage")
+  let btnPage = document.querySelectorAll(".page-item");
 
   btnPage.forEach((btn) => {
+    console.log("btn.innerHTML")
     btn.classList.remove("active");
   });
+
   eventTarget.classList.add("active");
   numberPage = eventTarget.dataset.page;
-
 
 
   if (numberPage === "Previous") {
@@ -381,30 +384,27 @@ function pagination(eventTarget) {
       numberPage = 1;
     } else {
       numberPage = parseInt(currentPage.dataset.page) - 1;
-      console.log(btnPage[numberPage]);
-      eventTarget = btnPage[numberPage];
-      eventTarget.classList.add("active");
     }
-  } else if (numberPage === "next") {
-    if (currentPage === null || currentPage.dataset.page == btnPage.length - 2) {
-      numberPage = btnPage.length - 2; // last page number
-    } else {
-      numberPage = parseInt(currentPage.dataset.page) + 1;
-      eventTarget = btnPage[numberPage];
-      eventTarget.classList.add("active");
-    } 
+    btnPage[0].classList.remove("active");
+    eventTarget = btnPage[numberPage];
+    eventTarget.classList.add("active");
   }
 
-
-
-  // next.dataset.page = parseInt(numberPage) + 1;
-  // previous.dataset.page = parseInt(numberPage) - 1;
+    if (numberPage === "Next") {
+    if (currentPage === eventTarget.previousElementSibling) {
+      numberPage = parseInt(currentPage.dataset.page);
+    } else if (currentPage === null) {
+      numberPage = 2;
+    } else {
+      numberPage = parseInt(currentPage.dataset.page) + 1;
+    }
+    eventTarget.classList.remove("active");
+    eventTarget = btnPage[numberPage];
+    eventTarget.classList.add("active");
+  }
 
   let pages = Math.ceil(products.length / 3); // 3 means 3 products per page
-  // 0     = (3 * 1) - 3
-  // 3     = (3 * 2) - 3
-  // 6     = (3 * 3) - 3
-  // 9     = (3 * 4) - 3
+
   firstItem = (3 * numberPage) - 3 // firstItem means first index for each page
   // secondItem = firstItem + 1
   // thirdItem = firstItem + 2
