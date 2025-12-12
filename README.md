@@ -15,6 +15,7 @@ CRUD operation in one project for product management system .
 - [User Experience](#user-experience)     
 - [Testing](#testing)
 - [Deployment](#deployment)
+- [Acknowledgements](#acknowledgements)
 
 <br><br>
 
