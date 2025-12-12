@@ -190,21 +190,21 @@ function createPaginationButtons(sayToPagination=false) {
   if (paginationContainer.children.length === 0 || sayToPagination) {
       paginationContainer.innerHTML = `
         <li class="page-item" onclick="pagination(this)" data-page="Previous">
-          <a class="page-link bg bg-light text-primary" href="#table-container" role="button" aria-label="Previous">
+          <a class="page-link bg bg-light text-primary" href="#pagination" role="button" aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>`;
       let numberOfPage = 0;
-      for (let i = 0; i < products.length; i += 3) {
+      for (let i = 0; i < products.length; i += 5) {
       numberOfPage++;
       paginationContainer.innerHTML += `
         <li class="page-item" onclick="pagination(this)" data-page="${numberOfPage}">
-          <a class="page-link bg bg-light text-primary" href="#table-container" role="button">${numberOfPage}</a>
+          <a class="page-link bg bg-light text-primary" href="#pagination" role="button">${numberOfPage}</a>
         </li>`;
       }
       paginationContainer.innerHTML += `
         <li class="page-item" onclick="pagination(this)" data-page="Next">
-          <a class="page-link bg bg-light text-primary" href="#table-container" role="button" aria-label="Next">
+          <a class="page-link bg bg-light text-primary" href="#pagination" role="button" aria-label="Next">
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>`;
@@ -266,13 +266,18 @@ function renderProducts(searchBy = "title", searchFor = "", firstItem = 0) {
           }
           paginationContainer.style.visibility = "hidden";// hide pagination during search
         } else {
-          if (id === firstItem || id === (firstItem +1) || id === (firstItem + 2)) {
+          if (id === firstItem || id === (firstItem +1) || id === (firstItem + 2) ||
+           id === (firstItem + 3) || id === (firstItem + 4)) {
             distributeProducts(product, id);
           }
         }
     });
   }
-  countProducts(products.length);
+  if ( count ) { // if count not equal zero
+    countProducts(products.length);
+  } else {
+    countProducts(count);
+  }
 }
 
 // show Message when update, delete one product or all products ___________
