@@ -185,32 +185,6 @@ submit.addEventListener("click", (e) => {
   renderProducts();
 });
 
-// create Pagination buttons when page loading or [create, delete or delete-all] product
-function createPaginationButtons(sayToPagination=false) {
-  if (paginationContainer.children.length === 0 || sayToPagination) {
-      paginationContainer.innerHTML = `
-        <li class="page-item" onclick="pagination(this)" data-page="Previous">
-          <a class="page-link bg bg-light text-primary" href="#pagination" role="button" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-        </li>`;
-      let numberOfPage = 0;
-      for (let i = 0; i < products.length; i += 5) {
-      numberOfPage++;
-      paginationContainer.innerHTML += `
-        <li class="page-item" onclick="pagination(this)" data-page="${numberOfPage}">
-          <a class="page-link bg bg-light text-primary" href="#pagination" role="button">${numberOfPage}</a>
-        </li>`;
-      }
-      paginationContainer.innerHTML += `
-        <li class="page-item" onclick="pagination(this)" data-page="Next">
-          <a class="page-link bg bg-light text-primary" href="#pagination" role="button" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-          </a>
-        </li>`;
-    }
-}
-
 // distribute products to table rows ___________
 // separated function to avoid code duplication-----
 //used in renderProducts() function-----
@@ -233,7 +207,34 @@ function distributeProducts(product, id) {
                 })">Delete</button></td>
               </tr>`);
 }
+    
 
+// create Pagination buttons when page loading or [create, delete or delete-all] product
+function createPaginationButtons(sayToPagination=false) {
+  if (paginationContainer.children.length === 0 || sayToPagination) {
+      paginationContainer.innerHTML = `
+        <li class="page-item" onclick="pagination(this)" data-page="Previous">
+          <a class="page-link bg bg-light text-primary" href="#pagination" role="button" aria-label="Previous" title="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>`;
+      let numberOfPage = 0;
+      for (let i = 0; i < products.length; i += 5) {
+      numberOfPage++;
+      paginationContainer.innerHTML += `
+        <li class="page-item" onclick="pagination(this)" data-page="${numberOfPage}">
+          <a class="page-link bg bg-light text-primary" href="#pagination" role="button">${numberOfPage}</a>
+        </li>`;
+      }
+      paginationContainer.innerHTML += `
+        <li class="page-item" onclick="pagination(this)" data-page="Next">
+          <a class="page-link bg bg-light text-primary" href="#pagination" role="button" aria-label="Next"  title="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>`;
+  }
+}
+    
 // displaying data(products) in a table from localStorage ________
 function renderProducts(searchBy = "title", searchFor = "", firstItem = 0) {
   let count = 0; // reset count for each render
@@ -273,7 +274,7 @@ function renderProducts(searchBy = "title", searchFor = "", firstItem = 0) {
         }
     });
   }
-  if ( !count && !searchFor) { // if count equal zero
+  if ( !count && !searchFor) { // if count equal zero & there no search
     countProducts(products.length);
   } else {
     countProducts(count);
