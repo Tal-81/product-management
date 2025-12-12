@@ -402,6 +402,10 @@ function pagination(eventTarget) {
     if (numberPage === "Next") {
     if (currentPage === eventTarget.previousElementSibling) {
       numberPage = parseInt(currentPage.dataset.page);
+      // this case just if there [Previous|1|Next] buttons
+    } else if (eventTarget.parentElement.children.length === 3) {
+      numberPage = 1;
+      // this case when page loading
     } else if (currentPage === null) {
       numberPage = 2;
     } else {
@@ -415,7 +419,7 @@ function pagination(eventTarget) {
   let pages = Math.ceil(products.length / 5); // 5 means 5 products per page
 
   //  The line below: 5 means --> every page has 5 products  
-  firstItem = (5 * numberPage) - 5 // firstItem means first index for each page
+  firstItem = (5 * numberPage) - 5; // firstItem means first index for each page
   // secondItem = firstItem + 1
   // thirdItem = firstItem + 2
   renderProducts("title", "", firstItem);
