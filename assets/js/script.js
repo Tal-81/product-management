@@ -37,8 +37,6 @@ if (!localStorage.getItem("products")) {
   products = JSON.parse(localStorage.getItem("products"));
 }
 
-
-
 // show Message when the form has submitted ___________
 function showMsg(target, text) {
   if (target !== null) {
@@ -190,7 +188,6 @@ submit.addEventListener("click", (e) => {
 // create Pagination buttons when page loading or [create, delete or delete-all] product
 function createPaginationButtons(sayToPagination=false) {
   if (paginationContainer.children.length === 0 || sayToPagination) {
-    console.log(sayToPagination)
       paginationContainer.innerHTML = `
         <li class="page-item" onclick="pagination(this)" data-page="Previous">
           <a class="page-link bg bg-light text-primary" href="#table-container" role="button" aria-label="Previous">
@@ -371,7 +368,6 @@ function pagination(eventTarget) {
   let btnPage = document.querySelectorAll(".page-item");
 
   btnPage.forEach((btn) => {
-    console.log("btn.innerHTML")
     btn.classList.remove("active");
   });
 
