@@ -141,7 +141,7 @@ The business goals for developing and maintaining this Local Product Management 
 
 * Establish Reliability and Trust: Build a reputation for delivering a stable, functional, and consistent application across all supported devices, reinforcing its credibility as a dependable management tool.
 
-### How *World Cup Story* Achieves These Goals
+### How *Product Management* Achieves These Goals
 
 | **Feature** | **Description** | **Reinforces Goal** |
 |--------------|----------------|----------------------|
