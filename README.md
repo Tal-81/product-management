@@ -237,7 +237,7 @@ The project was deployed to GitHub Pages using the following steps.
 5. Refresh the page if it does not do so automatically.
 6. A link to the published site will appear at the top of the page.
 <br>
-* [Product Management](https://tal-81.github.io/product-management/)
+* ![Product Management](https://tal-81.github.io/product-management/)
 <br><br>
 
 ## Acknowledgements
